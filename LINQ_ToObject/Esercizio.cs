@@ -199,7 +199,7 @@ namespace LINQ_ToObject
             {
                 Console.WriteLine($"{item.Nome}-{item.Prezzo}");
             }
-         
+
 
             Console.WriteLine("Lista 2");
             foreach (var item in orderedList2)
@@ -246,7 +246,7 @@ namespace LINQ_ToObject
                 orderList
                 .GroupBy(o => o.ProductId);
             //orderList è una lista di Ordini; le liste hanno un Extension Method, GroupBy, che restituisce un oggetto che implementa un IEnumerable, che contiene degli oggetti che implementano IGrouping
-            
+
             foreach (var order in groupByList2)
             {
                 Console.WriteLine(order.Key);
@@ -254,6 +254,140 @@ namespace LINQ_ToObject
                 {
                     Console.WriteLine("\t{0} - {1}", item.ProductId, item.Quantity);
                 }
+            }
+
+            //GroupBy con funzioni di aggregazione
+            //Raggruppiamo gli ordini per prodotto e ricaviamo la somma delle quantità
+            Console.WriteLine("GroupBy con aggregato: ");
+            //Method Syntax
+            var sumQuantityByProduct =
+                orderList
+                .GroupBy(p => p.ProductId) //raggruppo per ProductId
+                .Select(lista => new //risultato finale: una lista con Key e quantità
+                {
+                    Id = lista.Key,
+                    Quantities = lista.Sum(p => p.Quantity)
+                });
+
+            foreach (var item in sumQuantityByProduct)
+            {
+                Console.WriteLine("{0} - {1}", item.Id, item.Quantities);
+            }
+
+            //Query Syntax
+            var sumQuantityByProduct2 =
+                from o in orderList
+                group o by o.ProductId into list3
+                select new { Id = list3.Key, Quantities = list3.Sum(x => x.Quantity) };
+
+            foreach (var item in sumQuantityByProduct2)
+            {
+                Console.WriteLine("{0} - {1}", item.Id, item.Quantities);
+            }
+
+
+            //Join: in Linq il Join da solo è sempre inteso come INNER JOIN
+            //recuperiamo i prodotti che hanno ordini
+            //Nome - Id Ordine - Quantità
+            Console.WriteLine("Join: ");
+
+            //Method Syntax
+            var joinList = productList
+                .Join(
+                orderList, //seconda lista
+                p => p.Id, //chiave prima lista
+                o => o.ProductId, //chiave seconda lista
+                (p, o) => new
+                {
+                    Nome = p.Name,
+                    IdOrdine = o.Id,
+                    Quantity = o.Quantity
+                }
+                );
+
+            foreach (var item in joinList)
+            {
+                Console.WriteLine($"{item.Nome} - {item.IdOrdine} - {item.Quantity}");
+            }
+
+            //Query syntax
+            var joinedList2 =
+                from p in productList
+                join o in orderList
+                on p.Id equals o.ProductId
+                select new
+                {
+                    Nome = p.Name,
+                    IdOrdine = o.Id,
+                    Quantity = o.Quantity
+                };
+
+            foreach (var item in joinedList2)
+            {
+                Console.WriteLine($"{item.Nome} - {item.IdOrdine} - {item.Quantity}");
+            }
+
+            //GroupJoin: mette insieme la Join e il GroupBy
+            //recuperiamo gli ordini per prodotto e sommiamo le quantità
+            //Nome Prodotto - Quantità totale
+
+            Console.WriteLine("GroupJoin:");
+            //Method Syntax
+            var groupJoinList = productList
+                .GroupJoin(
+                    orderList,
+                    p=> p.Id, 
+                    o=> o.ProductId, //faccio la join su questi due campi
+                    (p,o) => 
+                        new {
+                        NomeProdotto = p.Name, //raggruppo per gli id ma stampo in base ai nomi
+                        TotalQuantity = o.Sum(o=>o.Quantity)});
+
+            foreach (var item in groupJoinList)
+            {
+                Console.WriteLine($"{item.NomeProdotto} - {item.TotalQuantity}");
+            }
+
+            var groupJoinList2 =
+                from p in productList
+                join o in orderList
+                on p.Id equals o.ProductId
+                into gr //in gr mi salvo "la relazione" tra le tabelle, infatti posso usarlo solo per fare le operazioni.
+                select new //Qui nel select uso il gr solo per fare le operazioni, ma p è quello originario, non quello joinato.
+                {
+                    Prodotto = p.Name,
+                    Quantity = gr.Sum(o => o.Quantity) //faccio riferimento alla tabella di ordini
+                };
+            Console.WriteLine("Query Syntax:");
+            foreach (var item in groupJoinList2)
+            {
+                Console.WriteLine("{0} - {1}", item.Prodotto, item.Quantity);
+            }
+
+            //Come fare l'inner join che vedremmo su SQL, qui vediamo solo i prodotti la cui quantità non è 0
+            //Mentre prima vedevamo tutti i prodotti e quelli che non stavano nella join settava il valore di quantità a 0 che è quello di default
+            var lista4 =
+                from o in orderList
+                group o by o.ProductId
+                into gr
+                select new
+                {
+                    ProdottoId = gr.Key,
+                    Quantity = gr.Sum(o => o.Quantity)
+                }
+                into gr1 //qui in gr1 non vedo gli elementi che non stanno nella join
+                join p in productList
+                on gr1.ProdottoId equals p.Id
+                select new //Qui p è davvero quello joinato perchè ho fatto il join vero tra p e una effettiva tabella gr
+                {
+                    p.Name,
+                    gr1.Quantity
+                };
+
+            Console.WriteLine("InnerJoin vero");
+            foreach (var item in lista4)
+            {
+                Console.WriteLine($"{item.Name} - {item.Quantity}");
             }
 
 
