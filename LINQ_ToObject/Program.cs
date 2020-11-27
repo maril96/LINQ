@@ -11,7 +11,8 @@ namespace LINQ_ToObject
 
             //Esercizio.DeferredExecution();
             //TryingOverrideDistinct();
-            Esercizio.Operators();
+            //Esercizio.Operators();
+            Esercizio.Syntax();
 
 
         }

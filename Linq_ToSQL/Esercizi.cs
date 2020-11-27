@@ -130,7 +130,7 @@ namespace Linq_ToSQL
             {
                 Console.WriteLine("Titolo del film da aggiornare:");
                 string daAggiornare = Console.ReadLine();
-
+                
                 IQueryable<Movy> filmByTitle =
                     from film in db.Movies
                     where film.Titolo == daAggiornare

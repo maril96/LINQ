@@ -78,7 +78,7 @@ namespace LINQ_ToObject
             //Esecuzione Immediata:
             //Creazione Query (Method Syntax)
             var list1 = productList
-                .Where(p => p.UnitPrice >= 400)
+                .Where(p => p.UnitPrice >= 400) 
                 .Select(p => new { Nome = p.Name, Prezzo = p.UnitPrice })
                 .ToList();
             //Io so che list1 è una lista, ma senza fare il ToList ho visibilità solo limitata ad IEnumerable.
@@ -112,12 +112,15 @@ namespace LINQ_ToObject
             //Query Syntax
             var queryList =
                ( from p in productList
-                where p.UnitPrice <= 600
-                select new { Nome = p.Name, Prezzo = p.UnitPrice }).ToList();
+                 where (p.UnitPrice <= 600)
+                 select new { Nome = p.Name, Prezzo = p.UnitPrice }).ToList();
 
             //queste due forme di query fanno la stessa cosa.
-            
 
+            foreach (var item in queryList)
+            {
+                Console.WriteLine($"{item.Nome}, {item.Prezzo}");
+            }
         }
 
         //Operatori

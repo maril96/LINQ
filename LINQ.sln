@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINQ_ToObject", "LINQ_ToObj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linq_ToSQL", "Linq_ToSQL\Linq_ToSQL.csproj", "{F8E609B7-81DE-4F70-A668-45F6F29B64CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esercitazione_Linq", "EsercitazioneLinq\Esercitazione_Linq.csproj", "{0F764793-BD77-4B8D-94B4-208B1FAC3F62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F8E609B7-81DE-4F70-A668-45F6F29B64CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8E609B7-81DE-4F70-A668-45F6F29B64CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8E609B7-81DE-4F70-A668-45F6F29B64CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F764793-BD77-4B8D-94B4-208B1FAC3F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F764793-BD77-4B8D-94B4-208B1FAC3F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F764793-BD77-4B8D-94B4-208B1FAC3F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F764793-BD77-4B8D-94B4-208B1FAC3F62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
